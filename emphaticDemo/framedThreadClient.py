@@ -134,5 +134,5 @@ class ClientThread(Thread):
           fs.sendmsg(readFile) # send the data
 
 for i in range(100):
-    ClientThread(serverHost, serverPort, debug)
+    ClientThread(serverHost, serverPort, debug) # create 100 threads of the same file and just overwritres a hundred times
 

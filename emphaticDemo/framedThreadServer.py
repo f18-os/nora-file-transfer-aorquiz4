@@ -23,7 +23,7 @@ lsock.bind(bindAddr)
 lsock.listen(5)
 print("listening on:", bindAddr)
 
-lock = threading.Lock()
+lock = threading.Lock() # method of syncronization
 
 class ServerThread(Thread):
     requestCount = 0            # one instance / class
@@ -32,7 +32,7 @@ class ServerThread(Thread):
         self.fsock, self.debug = FramedStreamSock(sock, debug), debug
         self.start()
     def run(self):
-        lock.acquire()
+        lock.acquire()  # lock execution until release
         while True:
             header = self.fsock.receivemsg()
             if not header:
@@ -46,10 +46,8 @@ class ServerThread(Thread):
             wrtieFile.close()  # write the new file and close it
             requestNum = ServerThread.requestCount
             ServerThread.requestCount = requestNum + 1
-            # msg = ("%s! (%d)" % (payload, requestNum)).encode()
-            # self.fsock.sendmsg(msg)
-            print("complete %s" % (requestNum))   
-        lock.release()
+            print("complete %s" % (requestNum+1)) # prints number of file transfers 
+        lock.release() # unlocked and returns 
 
 
 while True:
