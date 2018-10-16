@@ -34,18 +34,24 @@ class ServerThread(Thread):
     def run(self):
         lock.acquire()
         while True:
-            msg = self.fsock.receivemsg()
-            if not msg:
+            header = self.fsock.receivemsg()
+            if not header:
                 lock.release()
                 if self.debug: print(self.fsock, "server thread done")
                 return
+            fileName = header.decode() # convert to string by decoding bytes
+            payload = self.fsock.receivemsg()
+            wrtieFile = open(os.getcwd()+"/serverFiles/"+fileName, 'wb')
+            wrtieFile.write(payload)
+            wrtieFile.close()  # write the new file and close it
             requestNum = ServerThread.requestCount
             ServerThread.requestCount = requestNum + 1
-            msg = ("%s! (%d)" % (msg, requestNum)).encode()
-            self.fsock.sendmsg(msg)
+            # msg = ("%s! (%d)" % (payload, requestNum)).encode()
+            # self.fsock.sendmsg(msg)
+            print("complete %s" % (requestNum))   
         lock.release()
 
 
 while True:
     sock, addr = lsock.accept()
-    ServerThread(sock, debug)
+    ServerThread(sock, debug) 
