@@ -8,5 +8,5 @@ File 'framedThreadClient.py' reads a file that is input by user.
 
 To run (each command in seperate terminal):
 
-	'$ ./framedThreadServer.py'
-	'$ ./framedThreadClient.py'
+	$ ./framedThreadServer.py
+	$ ./framedThreadClient.py
